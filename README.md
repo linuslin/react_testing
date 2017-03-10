@@ -1,3 +1,7 @@
+## This testing tutorial is base on following React turtorial
+
+with testing with mocha + enzyme + jsdom + chai
+
 # React Tutorial: Build a ToDo App
 
 ## Live App Demo
