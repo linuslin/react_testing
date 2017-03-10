@@ -1,0 +1,135 @@
+import React from 'react';
+import {mount, shallow } from 'enzyme';
+import {expect} from 'chai';
+import {spy, stub} from 'sinon'
+import TodosList from '../src/components/todos-list';
+import CreateTodo from '../src/components/create-todo';
+import TodosItem from '../src/components/todos-list-item';
+import App from '../src/components/app';
+var jsdom = require('jsdom').jsdom;
+
+describe('Test todos-list-item', function() {
+  var fakeToggleTaskStub,fakeDeleteStub,fakeSaveStub=false;
+  let fakeToggleTask = function(task){fakeToggleTaskStub=true;};
+  let fakeDeleteTask = function(task){fakeDeleteStub=true;};
+  let fakeSaveTask = function(task){fakeSaveStub=true;};
+  const fakeProps={toggleTask: fakeToggleTask , deleteTask: fakeDeleteTask, saveTask:fakeSaveTask};
+
+  before('setup toogleTask/deleteTask props', function() {
+    // runs before all tests in this block
+  });
+
+  after('none', function() {
+    // runs after all tests in this block
+  });
+
+  it('Constructor with state {isEditing: false}.', function () {
+    const wrapper = shallow(<TodosItem toggleTask={fakeToggleTask} deleteTask={fakeDeleteTask} />);
+    expect(wrapper.instance().state['isEditing']).to.equal(false);
+  });
+  
+  it('renderError():will return null and with state {error:null}.', function () {
+    const wrapper = shallow(<CreateTodo />);
+    expect(wrapper.instance().renderError()).to.equal(null);
+  });
+  
+  it('renderError() with state error:"Hello World"', function () {
+    const wrapper = shallow(<CreateTodo />);
+    let task="Hello World";
+    wrapper.instance().state['error']=task;
+    let result = wrapper.instance().renderError();
+    expect(result.props['style']).to.deep.equal({color:'red'});
+    expect(result.props['children']).to.equal(task);
+  });
+  
+  it('render(): with a form', function () {
+    const wrapper = shallow(<CreateTodo />);
+    expect(wrapper.find('form')).to.have.length(1);
+  });
+
+  it('render(): with an input and button in the form', function () {
+    const wrapper = shallow(<CreateTodo><form></form></CreateTodo>);
+    //TODO:
+    expect(wrapper.find('input')).to.have.length(1);
+    expect(wrapper.find('button')).to.have.length(1);
+  });
+ 
+  it('render(): with an input with placeholder "What do I need to do"', function () {
+    const wrapper = shallow(<CreateTodo><form></form></CreateTodo>);
+    expect(wrapper.find('input').last().props()['placeholder']).to.equal('What do I need to do?');
+  });
+  
+  it('render(): with an input with ref "createInput"', function () {
+    const wrapper = shallow(<CreateTodo><form></form></CreateTodo>);
+    expect(wrapper.find('input').node.ref).to.equal('createInput');
+  });
+
+  it('render(): with an input with type "text"', function () {
+    const wrapper = shallow(<CreateTodo><form></form></CreateTodo>);
+    expect(wrapper.find('input').at(0).props()['type']).to.equal('text');
+  });
+  
+  it('render(): with an button with text "Create"', function () {
+    const wrapper = shallow(<CreateTodo><form></form></CreateTodo>);
+    expect(wrapper.find('button').last().text()).to.equal('Create');
+  });
+  
+  it('validateInput(task): with empty task will return "Please enter a task."', function () {
+    const wrapper = mount(<CreateTodo />);
+    let task=null;
+    expect(wrapper.instance().validateInput(task)).to.equal("Please enter a task.");
+  });
+  
+  it('validateInput(task): add a task "Hello" to props and validateInput("Hello") will return "Task already exists."', function () {
+    const wrapper = shallow(<CreateTodo />);
+    let myTask="Hello";
+    const todos = [{task:myTask,isCompleted: false},];
+    wrapper.setProps({'todos':todos});
+    expect(wrapper.instance().validateInput(myTask)).to.equal("Task already exists.");
+   });
+
+  it('validateInput(task): add a task "Hello" to props and validateInput("Yes") will return null.', function () {
+    const wrapper = shallow(<CreateTodo />);
+    let myTask="Hello";
+    const todos = [{task:myTask,isCompleted: false},];
+    wrapper.setProps({'todos':todos});
+    expect(wrapper.instance().validateInput("Yes")).to.equal(null);
+   });
+  
+  it('onEditClick(): the state "isEditing" will be set to true.', function () {
+    const wrapper = shallow(<TodosItem toggleTask={fakeToggleTask} deleteTask={fakeDeleteTask} />);
+    wrapper.instance().onEditClick();
+    expect(wrapper.instance().state).to.deep.equal({isEditing:true});
+   });
+
+  it('onCancelClick(): the state "isEditing" will be set to false', function () {
+    const wrapper = shallow(<TodosItem toggleTask={fakeToggleTask} deleteTask={fakeDeleteTask} />);
+    wrapper.instance().onCancelClick();
+    expect(wrapper.instance().state).to.deep.equal({isEditing:false});
+   });
+   
+  it('handleCreate(event): setProps "saveTask" a fake function, then sumbit with input value "Hello", expect state will be {error:null} and createInput.value will be empty "".', function () {
+    //var ev = new document.Event("fake", {"bubbles":true, "cancelable":false}); 
+    var event = document.createEvent('Event');
+    event.initEvent('fake', true, true);
+    //const wrapper = mount(<table><tbody><TodosItem toggleTask={fakeToggleTask} deleteTask={fakeDeleteTask} saveTask={fakeSaveTask} /></tbody></table>);
+    //wrapper.find(TodosItem).node.state['isEditing']=true;
+    //var newWrapper = wrapper.children().childAt(0);
+    //console.log(newWrapper);
+    //console.log(wrapper);
+    //wrapper.update();
+    //newWrapper.node.onSaveClick(event);
+    //console.log(wrapper.find(TodosItem).node.state);
+    //wrapper.update(); // setState({isEditing:true});
+    //wrapper.find(TodosItem).node.onSaveClick(event);
+   
+    const wrapper = mount(<TodosItem toggleTask={fakeToggleTask} deleteTask={fakeDeleteTask} saveTask={fakeSaveTask} />);
+    wrapper.setState({isEditing:true});
+    wrapper.instance().onSaveClick(event);
+  });
+
+
+  
+});
+
+

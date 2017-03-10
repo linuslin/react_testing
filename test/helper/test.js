@@ -1,0 +1,2 @@
+
+global.hello='hello';

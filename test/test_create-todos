@@ -1,0 +1,117 @@
+import React from 'react';
+import {mount, shallow } from 'enzyme';
+import {expect} from 'chai';
+import {spy, stub} from 'sinon'
+import TodosList from '../src/components/todos-list';
+import CreateTodo from '../src/components/create-todo';
+import TodosItem from '../src/components/todos-list-item';
+import App from '../src/components/app';
+
+describe('Test creat-todos', function() {
+  it('Constructor with state {error: null}.', function () {
+    const wrapper = shallow(<CreateTodo />);
+    expect(wrapper.instance().state['error']).to.equal(null);
+  });
+  
+  it('renderError():will return null and with state {error:null}.', function () {
+    const wrapper = shallow(<CreateTodo />);
+    expect(wrapper.instance().renderError()).to.equal(null);
+  });
+  
+  it('renderError() with state error:"Hello World"', function () {
+    const wrapper = shallow(<CreateTodo />);
+    let task="Hello World";
+    wrapper.instance().state['error']=task;
+    let result = wrapper.instance().renderError();
+    expect(result.props['style']).to.deep.equal({color:'red'});
+    expect(result.props['children']).to.equal(task);
+  });
+  
+  it('render(): with a form', function () {
+    const wrapper = shallow(<CreateTodo />);
+    expect(wrapper.find('form')).to.have.length(1);
+  });
+
+  it('render(): with an input and button in the form', function () {
+    const wrapper = shallow(<CreateTodo><form></form></CreateTodo>);
+    //TODO:
+    expect(wrapper.find('input')).to.have.length(1);
+    expect(wrapper.find('button')).to.have.length(1);
+  });
+ 
+  it('render(): with an input with placeholder "What do I need to do"', function () {
+    const wrapper = shallow(<CreateTodo><form></form></CreateTodo>);
+    expect(wrapper.find('input').last().props()['placeholder']).to.equal('What do I need to do?');
+  });
+  
+  it('render(): with an input with ref "createInput"', function () {
+    const wrapper = shallow(<CreateTodo><form></form></CreateTodo>);
+    expect(wrapper.find('input').node.ref).to.equal('createInput');
+  });
+
+  it('render(): with an input with type "text"', function () {
+    const wrapper = shallow(<CreateTodo><form></form></CreateTodo>);
+    expect(wrapper.find('input').at(0).props()['type']).to.equal('text');
+  });
+  
+  it('render(): with an button with text "Create"', function () {
+    const wrapper = shallow(<CreateTodo><form></form></CreateTodo>);
+    expect(wrapper.find('button').last().text()).to.equal('Create');
+  });
+  
+  it('validateInput(task): with empty task will return "Please enter a task."', function () {
+    const wrapper = mount(<CreateTodo />);
+    let task=null;
+    expect(wrapper.instance().validateInput(task)).to.equal("Please enter a task.");
+  });
+  
+  it('validateInput(task): add a task "Hello" to props and validateInput("Hello") will return "Task already exists."', function () {
+    const wrapper = shallow(<CreateTodo />);
+    let myTask="Hello";
+    const todos = [{task:myTask,isCompleted: false},];
+    wrapper.setProps({'todos':todos});
+    expect(wrapper.instance().validateInput(myTask)).to.equal("Task already exists.");
+   });
+
+  it('validateInput(task): add a task "Hello" to props and validateInput("Yes") will return null.', function () {
+    const wrapper = shallow(<CreateTodo />);
+    let myTask="Hello";
+    const todos = [{task:myTask,isCompleted: false},];
+    wrapper.setProps({'todos':todos});
+    expect(wrapper.instance().validateInput("Yes")).to.equal(null);
+   });
+  
+  it('handleCreate(event): submit with no input value the state will be {error:"Please enter a task."}', function () {
+    const wrapper = mount(<CreateTodo />);
+    wrapper.find('form').last().simulate('submit');
+    expect(wrapper.instance().state).to.deep.equal({error:'Please enter a task.'});
+    wrapper.unmount();
+   });
+
+  it('handleCreate(event): create a todos with task Hello and set input value: "Hello", then submit. The state will be {error:"Task already exists."}', function () {
+    const wrapper = mount(<CreateTodo />);
+    let myTask="Hello";
+    const todos = [{task:myTask,isCompleted: false},];
+    wrapper.setProps({'todos':todos});
+    wrapper.instance().refs.createInput.value="Hello"; 
+    wrapper.find('form').last().simulate('submit');
+    expect(wrapper.instance().state).to.deep.equal({error:"Task already exists."});
+   });
+   
+  it('handleCreate(event): setProps "createTask" a fake function, then sumbit with input value "Hello", expect state will be {error:null} and createInput.value will be empty "".', function () {
+    const wrapper = mount(<CreateTodo />);
+    var a=false;
+    let fakeCreateTask = function(task){a=true;};
+    wrapper.setProps({ createTask: fakeCreateTask });
+    wrapper.instance().refs.createInput.value="Hello"; 
+    wrapper.find('form').last().simulate('submit');
+    expect(a).to.equal(true);
+    expect(wrapper.instance().state).to.deep.equal({error:null});
+    expect(wrapper.instance().refs.createInput.value).to.equal('');
+   });
+
+
+  
+});
+
+

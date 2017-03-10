@@ -1,0 +1,146 @@
+
+console.log(hello);
+
+
+
+import React from 'react';
+import {mount, shallow } from 'enzyme';
+import {expect} from 'chai';
+import {spy, stub} from 'sinon'
+console.log(__dirname);
+import TodoList from '../src/components/todos-list';
+import TodosList from '../src/components/create-todo';
+import TodosItem from '../src/components/todos-list-item';
+import App from '../src/components/app';
+//import _ from 'lodash';
+var _ = require('lodash');
+//var _ = require('lodash/core')
+
+describe('Test todos-list', function() {
+  const props = {
+      todo: {
+        task: 'Finish unit test',
+        isCompleted: false
+      }
+    };
+
+  it('', function () {
+    const wrapper = mount(<App />);
+    console.log(document); 
+  });
+
+  it('should be a table there.', function () {
+    const wrapper = shallow(<TodoList/>);
+    expect(wrapper.find('table')).to.have.length(1);
+  });
+  
+  it('should have a renderItems() here.', function(){
+     const wrapper = shallow(<TodoList/>);
+     //expect(wrapper.find('aaaa')).to.have.length(1);
+  });
+});
+
+describe('Test create todo.js', function() {
+  it('should be a form there.', function () {
+    const wrapper = shallow(<TodosList/>);
+    expect(wrapper.find('form')).to.have.length(1);
+  });
+  
+  it('should have a input  here.', function(){
+     const wrapper = shallow(<TodosList/>);
+     expect(wrapper.find('input')).to.have.length(1);
+  });
+   
+  it('should have a button  here.', function(){
+     const wrapper = mount(<TodosList/>);
+     expect(wrapper.find('button')).to.have.length(1);
+     expect(wrapper.find('div')).to.have.length(0);
+     wrapper.find('button').last().simulate('click');
+     //expect(wrapper.find('div')).to.have.length(1);
+
+  }); 
+  
+  it('should have a button with Create text', function(){
+     const wrapper = shallow(<TodosList/>);
+     expect(wrapper.find('button')).to.have.length(1);
+     expect(wrapper.find('div')).to.have.length(0);
+     const onButtonClick = spy();
+     wrapper.find('button').last().simulate('click');
+     //console.log(wrapper.find('button').last().name());
+     //console.log(wrapper.find('button').last().props());
+     //console.log(wrapper.find('button').last().props().children);
+     expect((wrapper.find('button').last().props().children)).to.equal("Create");
+  }); 
+  
+    it('should list 3 todos', () => {
+        const props = {
+            todos: [
+                {
+                    task: 'Install packages',
+                    isCompleted: false
+                },
+                {
+                    task: 'Add webpack.config.js',
+                    isCompleted: false
+                },
+                {
+                    task: 'Break UI into components',
+                    isCompleted: false
+                }
+            ]
+        };
+        const wrapper = shallow(<TodoList {...props} />);
+        expect(wrapper.find(TodosItem).length).to.equal(3);
+   });
+
+  it('Please enter a task', function(){
+     const submitStub = stub();
+     const wrapper = mount(<TodosList> <form  onSubmit={submitStub} /> </TodosList>);
+     expect(wrapper.find('button')).to.have.length(1);
+     expect(wrapper.find('div')).to.have.length(0);
+     wrapper.find('form').last().simulate('submit');
+     expect(wrapper.find('div')).to.have.length(1);
+     expect(wrapper.find('div').last().props().children).to.equal("Please enter a task.");
+
+     //console.log(wrapper.find('div').last().props());
+     //const loginComponent = shallow(<form  onSubmit={submitStub} /> );
+     //loginComponent.simulate('submit');
+     //expect(submitStub.calledOnce).to.equal(true);
+     //expect(submitStub).to.have.property('callCount', 1);
+     //console.log(loginComponent);
+     //console.log(wrapper.find('button').last());
+     //console.log(loginComponent.childrenOfNode);
+     //expect(loginComponent.find('div')).to.have.length(0);
+     //const wrapper2 = mount(<TodosList/>);
+     //wrapper2.find('div').last();
+     //console.log(wrapper2.find('div').node.value);
+     //console.log(wrapper2.props());
+     //wrapper2.find('input').node.value = 'Task1';
+     //console.log(wrapper2.find('input').node.value);
+     //console.log(wrapper2.find('div').last().props());
+     //console.log(submitStub.returns());
+     //const onButtonClick = spy();
+     //wrapper.find('button').last().simulate('click');
+     //console.log(wrapper.find('button').last().props().children); 
+     //wrapper.find('form').last().simulate('Submit');
+     //wrapper.find('[type="submit"]').get(0).click();
+     //wrapper.find('[data-reactid=".0.1.1"]').get(0).click();
+     //console.log(wrapper.find('').last().props()); 
+     //expect((wrapper.find('button').last().props().children)).to.equal("Create");
+  }); 
+  it('Cannot create same task', function(){
+     const submitStub = stub().withArgs('eat dinner');
+     const wrapper = mount(<App><TodosList > <form  onSubmit={submitStub} /></TodosList> </App>);
+     wrapper.find('input').node.value= 'eat dinner';
+     wrapper.find('form').last().simulate('submit');
+     expect(wrapper.find('div').last().props().children).to.equal("Task already exists.");
+  });   
+  
+  it('should have a eat dinner here.', function(){
+     const wrapper = mount(<App />);
+     expect(wrapper.find(TodosItem)).to.have.length(2);
+  }); 
+      
+});
+
+
