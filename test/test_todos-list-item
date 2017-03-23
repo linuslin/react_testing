@@ -6,7 +6,6 @@ import TodosList from '../src/components/todos-list';
 import CreateTodo from '../src/components/create-todo';
 import TodosItem from '../src/components/todos-list-item';
 import App from '../src/components/app';
-var jsdom = require('jsdom').jsdom;
 
 describe('Test todos-list-item', function() {
   var isToggleTaskCalled,isDeleteTaskCalled,isSaveTaskCalled=false;
@@ -95,9 +94,17 @@ describe('Test todos-list-item', function() {
    });
   
   it('render(): with a <tr> including renderTaskSection() and renderActionsSection() sections.', function () {
+   
+    //var spyTask = spy(TodosItem.prototype,'renderTaskSection');
+    //var spyAction = spy(TodosItem.prototype,'renderActionsSection');
     const wrapper = shallow(<TodosItem toggleTask={fakeToggleTask} deleteTask={fakeDeleteTask} />);
-    let result = wrapper.instance().render();
+    var spyTask = spy(wrapper.instance(),'renderTaskSection');
+    var spyAction = spy(wrapper.instance(),'renderActionsSection');
+    var result = wrapper.instance().render();
     expect(result.type).to.equal('tr');
+    expect(result.props['children']).to.have.length(2);
+    expect(spyTask.calledOnce).to.equal(true);
+    expect(spyAction.calledOnce).to.equal(true);
   });
   
   it('validateInput(task): with empty task will return "Please enter a task."', function () {
@@ -133,7 +140,6 @@ describe('Test todos-list-item', function() {
     event.initEvent('fake', true, true);
     const wrapper = mount(<TodosItem toggleTask={fakeToggleTask} deleteTask={fakeDeleteTask} saveTask={fakeSaveTask} />);
     wrapper.setState({isEditing:true});
-    console.log(wrapper.instance());
     wrapper.instance().onSaveClick(event);
     expect(wrapper.instance().state).to.deep.equal({isEditing:false});
     expect(isSaveTaskCalled).to.equal(true);
