@@ -128,17 +128,12 @@ describe('Test todos-list-item', function() {
   it('onSaveClick(event): setProps "saveTask" a fake function, then sumbit with input value "Hello", expect state will be {isEditing:false}, isFakeSaveCalled.', function () {
     var event = document.createEvent('Event');
     event.initEvent('fake', true, true);
-    const wrapper = mount(<TodosItem toggleTask={fakeToggleTask} deleteTask={fakeDeleteTask} saveTask={fakeSaveTask} />);
-    wrapper.setState({isEditing:true});
-    wrapper.instance().onSaveClick(event);
-    expect(wrapper.instance().state).to.deep.equal({isEditing:false});
-    expect(isSaveTaskCalled).to.equal(true);
-  });
-  
-  it('onSaveClick(event): setProps "saveTask" a fake function, then sumbit with input value "Hello", expect state will be {isEditing:false}, isFakeSaveCalled.', function () {
-    var event = document.createEvent('Event');
-    event.initEvent('fake', true, true);
-    const wrapper = mount(<TodosItem toggleTask={fakeToggleTask} deleteTask={fakeDeleteTask} saveTask={fakeSaveTask} />);
+    
+    const tmpTable = global.document.createElement('table');
+    const tmpTbody = global.document.createElement('tbody');
+    tmpTable.appendChild(tmpTbody);
+
+    const wrapper = mount(<TodosItem toggleTask={fakeToggleTask} deleteTask={fakeDeleteTask} saveTask={fakeSaveTask} />,{ attachTo:tmpTbody});
     wrapper.setState({isEditing:true});
     wrapper.instance().onSaveClick(event);
     expect(wrapper.instance().state).to.deep.equal({isEditing:false});
