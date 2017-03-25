@@ -2,9 +2,9 @@ import React from 'react';
 import {mount, shallow } from 'enzyme';
 import {expect} from 'chai';
 import {spy, stub} from 'sinon'
-import TodosList from '../src/components/todos-list';
-import TodosItem from '../src/components/todos-list-item';
-import ListHeader from '../src/components/todos-list-header';
+import TodosList from '../../src/components/todos-list';
+import TodosItem from '../../src/components/todos-list-item';
+import ListHeader from '../../src/components/todos-list-header';
 
 describe('Test todos-list', function() {
   let fakeTodos = [{task: 'Ha', isCompleted: false},{task: 'Hi',isCompleted: true}];

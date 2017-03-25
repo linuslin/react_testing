@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server"
+    "start": "node server",
+    "unittest": "mocha ./test/helpers/browser.js ./test/UnitTests/test_*"
   },
   "keywords": [],
   "author": "Michael Cheng <cheng.c.mike@gmail.com> (http://michaelcheng.io)",
@@ -33,7 +34,7 @@
     "react-hot-loader": "^1.3.0",
     "sinon": "^1.17.7",
     "webpack": "^1.12.13",
-    "webpack-dev-server": "^1.14.1",
+    "webpack-dev-server": "^1.14.1"
   },
   "engines": {
     "node": "5.5.0"

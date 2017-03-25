@@ -2,7 +2,7 @@ import React from 'react';
 import {mount, shallow } from 'enzyme';
 import {expect} from 'chai';
 import {spy, stub} from 'sinon'
-import ListHeader from '../src/components/todos-list-header';
+import ListHeader from '../../src/components/todos-list-header';
 
 describe('Test todos-list-header', function() {
 

@@ -2,10 +2,10 @@ import React from 'react';
 import {mount, shallow } from 'enzyme';
 import {expect} from 'chai';
 import {spy, stub} from 'sinon'
-import TodosList from '../src/components/todos-list';
-import CreateTodo from '../src/components/create-todo';
-import TodosItem from '../src/components/todos-list-item';
-import App from '../src/components/app';
+import TodosList from '../../src/components/todos-list';
+import CreateTodo from '../../src/components/create-todo';
+import TodosItem from '../../src/components/todos-list-item';
+import App from '../../src/components/app';
 
 describe('Test creat-todos', function() {
   it('Constructor with state {error: null}.', function () {
@@ -85,7 +85,6 @@ describe('Test creat-todos', function() {
     const wrapper = mount(<CreateTodo />);
     wrapper.find('form').last().simulate('submit');
     expect(wrapper.instance().state).to.deep.equal({error:'Please enter a task.'});
-    wrapper.unmount();
    });
 
   it('handleCreate(event): create a todos with task Hello and set input value: "Hello", then submit. The state will be {error:"Task already exists."}', function () {

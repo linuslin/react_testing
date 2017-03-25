@@ -2,10 +2,10 @@ import React from 'react';
 import {mount, shallow } from 'enzyme';
 import {expect} from 'chai';
 import {spy, stub} from 'sinon'
-import TodosList from '../src/components/todos-list';
-import CreateToDo from '../src/components/create-todo';
-import TodosItem from '../src/components/todos-list-item';
-import App from '../src/components/app';
+import TodosList from '../../src/components/todos-list';
+import CreateToDo from '../../src/components/create-todo';
+import TodosItem from '../../src/components/todos-list-item';
+import App from '../../src/components/app';
 //import _ from 'lodash';
 
 describe('Test App', function() {
