@@ -1,11 +1,8 @@
 import React from 'react';
-import {mount, shallow } from 'enzyme';
+import {mount, shallow} from 'enzyme';
 import {expect} from 'chai';
-import {spy, stub} from 'sinon'
-import TodosList from '../src/components/todos-list';
-import CreateTodo from '../src/components/create-todo';
+import {spy} from 'sinon'
 import TodosItem from '../src/components/todos-list-item';
-import App from '../src/components/app';
 
 describe('Test todos-list-item', function() {
   var isToggleTaskCalled,isDeleteTaskCalled,isSaveTaskCalled=false;
@@ -13,7 +10,6 @@ describe('Test todos-list-item', function() {
   let fakeDeleteTask = function(task){isDeleteTaskCalled=true;};
   let fakeSaveTask = function(task){isSaveTaskCalled=true;};
   let fakeTask = 'Hello';
-  const fakeProps={toggleTask:fakeToggleTask , deleteTask: fakeDeleteTask, saveTask:fakeSaveTask};
 
   before('none', function() {
     // runs before all tests in this block
@@ -94,7 +90,6 @@ describe('Test todos-list-item', function() {
    });
   
   it('render(): with a <tr> including renderTaskSection() and renderActionsSection() sections.', function () {
-   
     //var spyTask = spy(TodosItem.prototype,'renderTaskSection');
     //var spyAction = spy(TodosItem.prototype,'renderActionsSection');
     const wrapper = shallow(<TodosItem toggleTask={fakeToggleTask} deleteTask={fakeDeleteTask} />);
@@ -105,12 +100,6 @@ describe('Test todos-list-item', function() {
     expect(result.props['children']).to.have.length(2);
     expect(spyTask.calledOnce).to.equal(true);
     expect(spyAction.calledOnce).to.equal(true);
-  });
-  
-  it('validateInput(task): with empty task will return "Please enter a task."', function () {
-    const wrapper = mount(<CreateTodo />);
-    let task=null;
-    expect(wrapper.instance().validateInput(task)).to.equal("Please enter a task.");
   });
   
   it('onEditClick(): the state "isEditing" will be set to true.', function () {

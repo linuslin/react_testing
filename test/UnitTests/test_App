@@ -96,16 +96,12 @@ describe('Test App', function() {
     expect(wrapper.find(TodosItem).last().props()['isCompleted']).to.equal(false);
   });
 
-  
   it('deleteTask(): remove task "Hello React"', function () {
     const wrapper = mount(<App />);
     let oldTask='Hello React';
     wrapper.instance().deleteTask(oldTask);
     expect(wrapper.instance().state['todos']).to.have.length(2);
   });
-
-
-
   
 });
 

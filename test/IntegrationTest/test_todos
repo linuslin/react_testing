@@ -1,20 +1,11 @@
-
-console.log(hello);
-
-
-
 import React from 'react';
 import {mount, shallow } from 'enzyme';
 import {expect} from 'chai';
 import {spy, stub} from 'sinon'
-console.log(__dirname);
 import TodoList from '../src/components/todos-list';
 import TodosList from '../src/components/create-todo';
 import TodosItem from '../src/components/todos-list-item';
 import App from '../src/components/app';
-//import _ from 'lodash';
-var _ = require('lodash');
-//var _ = require('lodash/core')
 
 describe('Test todos-list', function() {
   const props = {
