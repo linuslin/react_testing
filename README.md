@@ -1,6 +1,16 @@
 ## This testing tutorial is base on following React turtorial
+## https://github.com/michaelcheng429/react-tutorial-todos
 
-with testing with mocha + enzyme + jsdom + chai
+
+I added some unit testing with mocha + enzyme + jsdom + chai.
+
+You can find these tests from "test/UnitTest" directory and simply run all unit tests with:
+
+`npm run unittest`
+
+
+
+
 
 # React Tutorial: Build a ToDo App
 
